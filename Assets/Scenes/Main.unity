@@ -381,7 +381,7 @@ MonoBehaviour:
   OnGameEnd:
     m_PersistentCalls:
       m_Calls: []
-  PizzaPrefab: {fileID: 1017951352232721731, guid: 0b08d7e9d0dfa3f4e9a6f51e9af83b17, type: 3}
+  PizzaPrefab: {fileID: 8640842774987575201, guid: e70302657d7e539419f167509f8438a7, type: 3}
   PizzaParent: {fileID: 1518053418}
   PizzaArray: []
   CardDeck: []
