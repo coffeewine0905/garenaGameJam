@@ -15,8 +15,8 @@ MonoBehaviour:
   id: 2
   MoveUp: 264
   MoveDown: 258
-  MoveLeft: 260
-  MoveRight: 262
+  MoveLeft: 262
+  MoveRight: 260
   Confirm: 271
   Animations:
   - {fileID: 11400000, guid: 18f1b2c2033f2304a85156e73b43a3a4, type: 2}

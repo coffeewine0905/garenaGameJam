@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private Player player;
     private List<CardController> cardControllers = new List<CardController>();
     private int currentCardIndex = 0;
+    private int lastCardIndex = -1;
     private bool myTurn = false;
     private int maxHealth = 0;
     private bool hasGetPizza = false;
@@ -111,6 +112,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator ShowPizza(PizzaData pizzaData)
     {
         GameManager.Instance.uiManager.ShowLog("Show Your Pizza!!");
+        yield return new WaitForSeconds(1.6f);
         spineAnimationCtrl.GetSpineAnime.state.SetAnimation(0, "nervous", false);
         spineAnimationCtrl.AddSpineAnima("eat pizza", true);
         yield return new WaitForSeconds(ShowPizzaDelay);
@@ -184,6 +186,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChooseCard(int index)
     {
+
         //檢查index是否超出範圍
         if (index < 0)
         {
@@ -193,23 +196,20 @@ public class PlayerController : MonoBehaviour
         {
             currentCardIndex = player.Hand.Count - 1;
         }
-        //遍歷所有卡片，將選中的卡片放大
-        for (int i = 0; i < cardControllers.Count; i++)
+
+        if (lastCardIndex != -1 && lastCardIndex != currentCardIndex)
         {
-            if (i == currentCardIndex)
-            {
-                cardControllers[i].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-                cardControllers[i].OnSelect();
-            }
-            else
-            {
-                cardControllers[i].transform.localScale = Vector3.one;
-                cardControllers[i].OnDeselect();
-            }
+            cardControllers[lastCardIndex].transform.localScale = Vector3.one;
+            cardControllers[lastCardIndex].OnDeselect();
         }
+
+        cardControllers[currentCardIndex].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        lastCardIndex = currentCardIndex;
     }
     private void UseCard()
     {
+        float delay = 0;
+        delay = gameController.GetCardDelay(player.Hand[currentCardIndex].ID);
         //使用卡片
         cardControllers[currentCardIndex].Use();
         //刪除使用過的卡片
@@ -219,6 +219,12 @@ public class PlayerController : MonoBehaviour
         cardControllers.RemoveAt(currentCardIndex);
         //對玩家的卡片進行排序
         SortCards();
+        //如果卡片使用完畢，則進入下一階段
+        StartCoroutine(useCardCoroutine(delay));
+    }
+    IEnumerator useCardCoroutine(float delay = 0)
+    {
+        yield return new WaitForSeconds(delay);
         gameController.StartGetPizzaPhase();
     }
     public void ShowCards()
@@ -228,6 +234,10 @@ public class PlayerController : MonoBehaviour
         {
             GameObject cardGo = Instantiate(cardPrefab, cardRoot);
             CardController cardController = cardGo.GetComponent<CardController>();
+            cardController.OnUseAction += (cardId) =>
+            {
+                gameController.UseCard(cardId, player.ID);
+            };
             cardController.Init(card, sortX);
             cardControllers.Add(cardController);
         }
@@ -286,5 +296,13 @@ public class PlayerController : MonoBehaviour
         currentCardIndex = 0;
         player.Health = maxHealth;
         ClearCards();
+    }
+
+    private void OnDestroy()
+    {
+        gameController.ShowCardAction -= ShowCards;
+        gameController.TurnStartAction -= TurnStart;
+        gameController.CardStartAction -= CardStart;
+        gameController.ReStartAction -= Reset;
     }
 }

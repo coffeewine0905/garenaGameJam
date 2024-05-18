@@ -386,6 +386,11 @@ MonoBehaviour:
   PizzaArray: []
   CardDeck: []
   Players: []
+  CardAbilityDataList:
+  - {fileID: 11400000, guid: 1425e760584dcbf4c8211f4a7bcd7692, type: 2}
+  - {fileID: 11400000, guid: 674b48926561f5d4a93f50ef69b3086e, type: 2}
+  - {fileID: 11400000, guid: ccc33b0411ff70b4da2484d46f4828ac, type: 2}
+  - {fileID: 11400000, guid: c3e01e8c8787d294aadf91280119538e, type: 2}
   currentSpice: 0
 --- !u!4 &501578878
 Transform:

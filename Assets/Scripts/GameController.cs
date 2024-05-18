@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     public List<CardData> CardDeck = new List<CardData>();
     public List<Player> Players = new List<Player>();
     public System.Action ShowCardAction;
+    public List<CardAbilityData> CardAbilityDataList = new List<CardAbilityData>();
 
     private int currentPlayerIndex = 0;
     private GameObject pizza;
@@ -87,9 +88,9 @@ public class GameController : MonoBehaviour
 
     void InitializeCardDeck()
     {
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < CardAbilityDataList.Count; i++)
         {
-            CardDeck.Add(new CardData { ID = i });
+            CardDeck.Add(new CardData { ID = CardAbilityDataList[i].ID });
         }
     }
 
@@ -237,5 +238,24 @@ public class GameController : MonoBehaviour
             Debug.Log("DecreaseSpice: " + currentSpice);
             GameManager.Instance.uiManager.ShowLog("DecreaseSpice: " + currentSpice);
         }
+    }
+    public void UseCard(int cardID, int playerID)
+    {
+        StartCoroutine(useCardCoroutine(cardID, playerID));
+    }
+    IEnumerator useCardCoroutine(int cardID, int playerID)
+    {
+        // 這裡可以實現卡片效果的邏輯
+        Debug.Log("Player id: " + playerID + " Use Card: " + cardID);
+        //從 CardAbilityDataList 中找到對應ID的卡片效果
+        CardAbilityData cardAbilityData = CardAbilityDataList.Find(x => x.ID == cardID);
+        GameManager.Instance.uiManager.ShowLog("Player id: " + playerID + " Use Card: " + cardAbilityData.Name);
+        yield return new WaitForSeconds(cardAbilityData.showDelay);
+    }
+
+    public float GetCardDelay(int cardID)
+    {
+        CardAbilityData cardAbilityData = CardAbilityDataList.Find(x => x.ID == cardID);
+        return cardAbilityData.showDelay;
     }
 }
