@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CardView : MonoBehaviour
 {
+    public TextMeshProUGUI cardText;
     public float OnSelectOffset = 0.1f;
     // Start is called before the first frame update
     void Start()
@@ -19,6 +21,7 @@ public class CardView : MonoBehaviour
 
     public void Init(CardData cardData, bool sortX)
     {
+        cardText.text = cardData.Name;
         // this.cardData = cardData;
         if (sortX)
         {

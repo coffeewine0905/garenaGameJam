@@ -380,7 +380,19 @@ MonoBehaviour:
       m_Calls: []
   OnGameEnd:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1141308535}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: EndGame
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   PizzaPrefab: {fileID: 8640842774987575201, guid: e70302657d7e539419f167509f8438a7, type: 3}
   PizzaParent: {fileID: 803798876}
   PizzaArray: []

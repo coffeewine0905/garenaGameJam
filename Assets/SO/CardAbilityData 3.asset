@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04eac1cd551a6a7488861c7a1854dc9f, type: 3}
   m_Name: CardAbilityData 3
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 2
   Name: "\u559D\u725B\u5976"
   Description: "\u88DC\u4E00\u500B\u611B\u5FC3"
+  showDelay: 3.7
