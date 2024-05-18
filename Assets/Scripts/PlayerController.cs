@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public GameObject cardPrefab;
     public List<GameObject> hpList = new List<GameObject>();
     public SpineAnimationCtrl spineAnimationCtrl;
+    public bool sortX = true;
     private Player player;
     private List<CardController> cardControllers = new List<CardController>();
     private int currentCardIndex = 0;
@@ -165,12 +166,12 @@ public class PlayerController : MonoBehaviour
     }
     private void CardAction()
     {
-        if (Input.GetKeyDown(playerInputData.MoveUp))
+        if (Input.GetKeyDown(playerInputData.MoveRight))
         {
             currentCardIndex++;
             ChooseCard(currentCardIndex);
         }
-        if (Input.GetKeyDown(playerInputData.MoveDown))
+        if (Input.GetKeyDown(playerInputData.MoveLeft))
         {
             currentCardIndex--;
             ChooseCard(currentCardIndex);
@@ -198,10 +199,12 @@ public class PlayerController : MonoBehaviour
             if (i == currentCardIndex)
             {
                 cardControllers[i].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+                cardControllers[i].OnSelect();
             }
             else
             {
                 cardControllers[i].transform.localScale = Vector3.one;
+                cardControllers[i].OnDeselect();
             }
         }
     }
@@ -225,7 +228,7 @@ public class PlayerController : MonoBehaviour
         {
             GameObject cardGo = Instantiate(cardPrefab, cardRoot);
             CardController cardController = cardGo.GetComponent<CardController>();
-            cardController.Init(card);
+            cardController.Init(card, sortX);
             cardControllers.Add(cardController);
         }
         //對玩家的卡片進行排序
@@ -245,7 +248,9 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < cardControllers.Count; i++)
         {
-            cardControllers[i].transform.localPosition = new Vector3(0, i + i * 0.2f, 0);
+            //建立一個變數決定正負
+            float temp = sortX ? 1 : -1;
+            cardControllers[i].transform.localPosition = new Vector3(i * 0.2f * temp, 0, 0);
         }
     }
 

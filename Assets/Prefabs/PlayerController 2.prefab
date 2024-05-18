@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 8408826485353152608}
   - {fileID: 4446698983728792704}
   spineAnimationCtrl: {fileID: 3040327098401312711}
+  sortX: 0
 --- !u!1 &1083085191869267909
 GameObject:
   m_ObjectHideFlags: 0
