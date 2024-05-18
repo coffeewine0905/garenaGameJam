@@ -49,6 +49,10 @@ MonoBehaviour:
   playerInputData: {fileID: 11400000, guid: 4667a0b0f60d1f64ab3a3c2f1cbeec0c, type: 2}
   cardRoot: {fileID: 1323294726321699655}
   cardPrefab: {fileID: 8166271710471778077, guid: 2c877d83716a37c438ad67fb47b27dcb, type: 3}
+  hpList:
+  - {fileID: 1083085191869267909}
+  - {fileID: 8408826485353152608}
+  - {fileID: 4446698983728792704}
 --- !u!1 &1083085191869267909
 GameObject:
   m_ObjectHideFlags: 0
