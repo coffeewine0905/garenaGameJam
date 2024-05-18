@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: PlayerInputData 1
   m_EditorClassIdentifier: 
   id: 1
-  MoveUp: 0
-  MoveDown: 0
+  MoveUp: 119
+  MoveDown: 115
+  Confirm: 32

@@ -21,4 +21,9 @@ public class CardController : MonoBehaviour
     {
         this.cardData = cardData;
     }
+
+    public void Use()
+    {
+        Debug.Log("Use Card: " + cardData.ID);
+    }
 }

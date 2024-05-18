@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
-  playerInputData: {fileID: 11400000, guid: 4667a0b0f60d1f64ab3a3c2f1cbeec0c, type: 2}
+  playerInputData: {fileID: 11400000, guid: c3f8cf1a90885664c9b29d9b10d05ec0, type: 2}
   cardRoot: {fileID: 1323294726321699655}
   cardPrefab: {fileID: 8166271710471778077, guid: 2c877d83716a37c438ad67fb47b27dcb, type: 3}
 --- !u!1 &1083085191869267909

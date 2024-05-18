@@ -15,6 +15,8 @@ public class CardData
 [Serializable]
 public class Player
 {
-    public int Health { get; set; } = 10;
+    public int ID { get; set; }
+    public int Health { get; set; } = 3;
     public List<CardData> Hand { get; set; } = new List<CardData>();
+    public Action RefreshCardAction;
 }

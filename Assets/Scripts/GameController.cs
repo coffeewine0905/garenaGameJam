@@ -1,9 +1,14 @@
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
+    public UnityEvent OnGameStart;
+    public UnityEvent<Player> OnGameEnd;
     public GameObject PizzaPrefab;
     public Transform PizzaParent;
     public List<PizzaData> PizzaArray = new List<PizzaData>();
@@ -13,6 +18,12 @@ public class GameController : MonoBehaviour
 
     private int currentPlayerIndex = 0;
     private GameObject pizza;
+    public Action<int> TurnStartAction;
+    public Action<int> TurnEndAction;
+    public Action<int> CardStartAction;
+    public Action ReStartAction;
+    public GameState CurrentGameState { get; set; }
+    public int currentSpice = 0;
 
     void Start()
     {
@@ -39,6 +50,24 @@ public class GameController : MonoBehaviour
 
     }
 
+    public void ConfirmSpice()
+    {
+        // 隨機選擇一片披薩並設置為辣
+        int randomIndex = UnityEngine.Random.Range(0, PizzaArray.Count);
+        PizzaArray[randomIndex].IsSpicy = true;
+
+        // 為所有玩家抽取對應數量的卡片
+        foreach (var player in Players)
+        {
+            player.Hand.AddRange(DrawCards(currentSpice));
+            player.RefreshCardAction?.Invoke();
+        }
+
+        // 進入使用卡片環節
+        StartCardUsagePhase();
+
+    }
+
     void InitializeCardDeck()
     {
         for (int i = 0; i < 11; i++)
@@ -55,6 +84,7 @@ public class GameController : MonoBehaviour
 
     public void StartGame()
     {
+        OnGameStart?.Invoke();
         foreach (var player in Players)
         {
             player.Hand.AddRange(DrawCards(3));
@@ -62,6 +92,8 @@ public class GameController : MonoBehaviour
         ShowCardAction?.Invoke();
         InitializePizza();
 
+        //TODO: 前置作業
+        CurrentGameState = GameState.Start;
         StartPlayerTurn();
     }
 
@@ -70,7 +102,7 @@ public class GameController : MonoBehaviour
         List<CardData> drawnCards = new List<CardData>();
         for (int i = 0; i < count; i++)
         {
-            int randomIndex = Random.Range(0, CardDeck.Count);
+            int randomIndex = UnityEngine.Random.Range(0, CardDeck.Count);
             drawnCards.Add(CardDeck[randomIndex]);
             // CardDeck.RemoveAt(randomIndex);
         }
@@ -81,18 +113,45 @@ public class GameController : MonoBehaviour
     {
         // 等待玩家選擇並使用卡片
         // 這裡可以實現玩家選擇卡片的邏輯
+        CurrentGameState = GameState.CardAction;
+        CardStartAction?.Invoke(Players[currentPlayerIndex].ID);
+    }
+
+    public void StartGetPizzaPhase()
+    {
+        // 等待玩家選擇披薩
+        // 這裡可以實現玩家選擇披薩的邏輯
+        CurrentGameState = GameState.GetPizza;
+    }
+
+    public void StartShowPizzaPhase()
+    {
+        // 等待玩家選擇披薩
+        // 這裡可以實現玩家選擇披薩的邏輯
+        CurrentGameState = GameState.ShowPizza;
+    }
+
+    public PizzaData GetPizzaData()
+    {
+        return PizzaArray[UnityEngine.Random.Range(0, PizzaArray.Count)];
+    }
+
+
+    void StartPlayerTurn()
+    {
+        // 等待玩家操作
+        // 這裡可以實現玩家操作介面的顯示
+        int currentPlayerID = Players[currentPlayerIndex].ID;
+        Debug.Log("Player " + currentPlayerID + " turn start");
+        TurnStartAction?.Invoke(currentPlayerID);
+
+        // 進入選擇辣椒環節
+        CurrentGameState = GameState.ChooseSpice;
+        Debug.Log("Player id: " + currentPlayerID + " ChooseSpice");
     }
 
     public void EndTurn()
     {
-        int randomPizzaIndex = Random.Range(0, PizzaArray.Count);
-        PizzaData selectedPizza = PizzaArray[randomPizzaIndex];
-
-        if (selectedPizza.IsSpicy)
-        {
-            Players[currentPlayerIndex].Health -= 1;
-        }
-
         if (Players[currentPlayerIndex].Health <= 0)
         {
             EndGame();
@@ -103,16 +162,19 @@ public class GameController : MonoBehaviour
             StartPlayerTurn();
         }
     }
-
-    void StartPlayerTurn()
-    {
-        // 等待玩家操作
-        // 這裡可以實現玩家操作介面的顯示
-    }
-
     void EndGame()
     {
         // 判斷遊戲結束邏輯
         Debug.Log("Game Over");
+        TurnEndAction?.Invoke(Players[currentPlayerIndex].ID);
+        OnGameEnd?.Invoke(Players[currentPlayerIndex]);
+    }
+
+    public void RestartGame()
+    {
+        // 重置遊戲數據
+        currentPlayerIndex = 0;
+        ReStartAction?.Invoke();
+        StartGame();
     }
 }

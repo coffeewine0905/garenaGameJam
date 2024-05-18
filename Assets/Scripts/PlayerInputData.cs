@@ -7,4 +7,6 @@ public class PlayerInputData : ScriptableObject
     public int id;
     public KeyCode MoveUp;
     public KeyCode MoveDown;
+
+    public KeyCode Confirm;
 }
