@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
-  m_Name: "\u516B\u54E5_Atlas"
+  m_Script: {fileID: 11500000, guid: 6e3e95a05e4c9774397eeeb7bdee8ccb, type: 3}
+  m_Name: peppery
   m_EditorClassIdentifier: 
-  atlasFile: {fileID: 4900000, guid: 4354981c621925e47b59e74f83deefbc, type: 3}
-  materials:
-  - {fileID: 2100000, guid: 7ac664cfa3265a94cb0e462761e7f07c, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 16767b5869329164482cda9e74b491f2, type: 2}
+  animationName: peppery

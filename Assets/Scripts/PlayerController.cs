@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using IGS_GAME_EX;
 using UnityEngine;
 public enum GameState
 {
@@ -19,12 +20,16 @@ public class PlayerController : MonoBehaviour
     public Transform cardRoot;
     public GameObject cardPrefab;
     public List<GameObject> hpList = new List<GameObject>();
+    public SpineAnimationCtrl spineAnimationCtrl;
     private Player player;
     private List<CardController> cardControllers = new List<CardController>();
     private int currentCardIndex = 0;
     private bool myTurn = false;
     private int maxHealth = 0;
     private bool hasGetPizza = false;
+    private float ShowPizzaDelay = 0;
+    private float ShowHappyDelay = 0;
+    private float ShowPepperyDelay = 0;
 
     public void Init(GameController gameController)
     {
@@ -40,6 +45,15 @@ public class PlayerController : MonoBehaviour
         gameController.TurnStartAction += TurnStart;
         gameController.CardStartAction += CardStart;
         gameController.ReStartAction += Reset;
+
+        int nervousIndex = playerInputData.Animations.FindIndex(x => x.name == "nervous");
+        int eatPizzaIndex = playerInputData.Animations.FindIndex(x => x.name == "eat pizza");
+        int happyIndex = playerInputData.Animations.FindIndex(x => x.name == "happy");
+        int pepperyIndex = playerInputData.Animations.FindIndex(x => x.name == "peppery");
+        ShowPizzaDelay += playerInputData.Animations[nervousIndex].Animation.Duration;
+        ShowPizzaDelay += playerInputData.Animations[eatPizzaIndex].Animation.Duration;
+        ShowHappyDelay += playerInputData.Animations[happyIndex].Animation.Duration;
+        ShowPepperyDelay += playerInputData.Animations[pepperyIndex].Animation.Duration;
     }
 
     private void CardStart(int index)
@@ -96,11 +110,15 @@ public class PlayerController : MonoBehaviour
     IEnumerator ShowPizza(PizzaData pizzaData)
     {
         GameManager.Instance.uiManager.ShowLog("Show Your Pizza!!");
-        yield return new WaitForSeconds(1.6f);
-        //TODO 做一些顯示披薩、吃披薩的動畫
+        spineAnimationCtrl.GetSpineAnime.state.SetAnimation(0, "nervous", false);
+        spineAnimationCtrl.AddSpineAnima("eat pizza", true);
+        yield return new WaitForSeconds(ShowPizzaDelay);
+        float delay = 0;
         if (pizzaData.IsSpicy)
         {
             Debug.Log("Pizza is spicy");
+            spineAnimationCtrl.GetSpineAnime.state.SetAnimation(0, "peppery", false);
+            spineAnimationCtrl.AddSpineAnima("standby", true);
             GameManager.Instance.uiManager.ShowLog("Pizza is spicy~~~");
             player.Health--;
             for (int i = 0; i < hpList.Count; i++)
@@ -114,13 +132,17 @@ public class PlayerController : MonoBehaviour
                     hpList[i].SetActive(false);
                 }
             }
+            delay = ShowPepperyDelay;
         }
         else
         {
             Debug.Log("Pizza is not spicy");
+            spineAnimationCtrl.GetSpineAnime.state.SetAnimation(0, "happy", false);
+            spineAnimationCtrl.AddSpineAnima("standby", true);
             GameManager.Instance.uiManager.ShowLog("SAFE!!");
+            delay = ShowHappyDelay;
         }
-        yield return new WaitForSeconds(1.6f);
+        yield return new WaitForSeconds(delay);
         myTurn = false;
         hasGetPizza = false;
         gameController.EndTurn();
