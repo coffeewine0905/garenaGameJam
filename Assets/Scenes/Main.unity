@@ -380,12 +380,29 @@ MonoBehaviour:
       m_Calls: []
   OnGameEnd:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1141308535}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: EndGame
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   PizzaPrefab: {fileID: 8640842774987575201, guid: e70302657d7e539419f167509f8438a7, type: 3}
   PizzaParent: {fileID: 803798876}
   PizzaArray: []
   CardDeck: []
   Players: []
+  CardAbilityDataList:
+  - {fileID: 11400000, guid: 1425e760584dcbf4c8211f4a7bcd7692, type: 2}
+  - {fileID: 11400000, guid: 674b48926561f5d4a93f50ef69b3086e, type: 2}
+  - {fileID: 11400000, guid: ccc33b0411ff70b4da2484d46f4828ac, type: 2}
+  - {fileID: 11400000, guid: c3e01e8c8787d294aadf91280119538e, type: 2}
   currentSpice: 0
 --- !u!4 &501578878
 Transform:
@@ -1147,9 +1164,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 501578877}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-        m_MethodName: RestartGame
+      - m_Target: {fileID: 1394280636}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: RestartOffLine2Player
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

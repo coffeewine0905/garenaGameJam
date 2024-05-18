@@ -32,4 +32,13 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
+
+    public void ClearPlayer()
+    {
+        //遍歷所有玩家，刪除玩家
+        foreach (var player in FindObjectsOfType<PlayerController>())
+        {
+            Destroy(player.gameObject);
+        }
+    }
 }

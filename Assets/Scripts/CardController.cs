@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class CardController : MonoBehaviour
 {
     public CardData cardData;
     private CardView cardView;
+    public Action<int> OnUseAction;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -26,7 +28,7 @@ public class CardController : MonoBehaviour
 
     public void Use()
     {
-        Debug.Log("Use Card: " + cardData.ID);
+        OnUseAction?.Invoke(cardData.ID);
     }
 
     public void OnSelect()
@@ -37,5 +39,10 @@ public class CardController : MonoBehaviour
     public void OnDeselect()
     {
         cardView.OnDeselect();
+    }
+
+    private void OnDestroy()
+    {
+        OnUseAction = null;
     }
 }

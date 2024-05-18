@@ -15,15 +15,20 @@ public class GameController : MonoBehaviour
     public List<CardData> CardDeck = new List<CardData>();
     public List<Player> Players = new List<Player>();
     public System.Action ShowCardAction;
+    public List<CardAbilityData> CardAbilityDataList = new List<CardAbilityData>();
 
     private int currentPlayerIndex = 0;
     private GameObject pizza;
     public Action<int> TurnStartAction;
     public Action<int> TurnEndAction;
     public Action<int> CardStartAction;
+    public Action<int> AddHpAction;
+    public Action<int> HappyAction;
     public Action ReStartAction;
     public GameState CurrentGameState { get; set; }
     public int currentSpice = 0;
+
+    private bool passThisTurn = false;
 
     void Start()
     {
@@ -72,6 +77,9 @@ public class GameController : MonoBehaviour
     }
     IEnumerator AddCardPhase()
     {
+        //顯示log 加了幾片辣椒
+        GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " Spice!!!");
+        yield return new WaitForSeconds(1.6f);
         // 為所有玩家抽取對應數量的卡片
         GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " cards");
         foreach (var player in Players)
@@ -87,9 +95,14 @@ public class GameController : MonoBehaviour
 
     void InitializeCardDeck()
     {
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < CardAbilityDataList.Count; i++)
         {
-            CardDeck.Add(new CardData { ID = i });
+            CardDeck.Add(new CardData
+            {
+                ID = CardAbilityDataList[i].ID,
+                Name = CardAbilityDataList[i].Name,
+                Description = CardAbilityDataList[i].Description
+            });
         }
     }
 
@@ -149,6 +162,12 @@ public class GameController : MonoBehaviour
     {
         // 等待玩家選擇披薩
         // 這裡可以實現玩家選擇披薩的邏輯
+        if (passThisTurn)
+        {
+            passThisTurn = false;
+            EndTurn();
+            return;
+        }
         CurrentGameState = GameState.GetPizza;
     }
 
@@ -196,6 +215,7 @@ public class GameController : MonoBehaviour
 
     public void EndTurn()
     {
+        TurnEndAction?.Invoke(Players[currentPlayerIndex].ID);
         if (Players[currentPlayerIndex].Health <= 0)
         {
             EndGame();
@@ -210,7 +230,7 @@ public class GameController : MonoBehaviour
     {
         // 判斷遊戲結束邏輯
         Debug.Log("Game Over");
-        TurnEndAction?.Invoke(Players[currentPlayerIndex].ID);
+        CurrentGameState = GameState.End;
         OnGameEnd?.Invoke(Players[currentPlayerIndex]);
     }
 
@@ -218,6 +238,7 @@ public class GameController : MonoBehaviour
     {
         // 重置遊戲數據
         currentPlayerIndex = 0;
+        Players.Clear();
         ReStartAction?.Invoke();
         StartGame();
     }
@@ -237,5 +258,52 @@ public class GameController : MonoBehaviour
             Debug.Log("DecreaseSpice: " + currentSpice);
             GameManager.Instance.uiManager.ShowLog("DecreaseSpice: " + currentSpice);
         }
+    }
+    public void UseCard(int cardID, int playerID)
+    {
+        StartCoroutine(useCardCoroutine(cardID, playerID));
+    }
+    IEnumerator useCardCoroutine(int cardID, int playerID)
+    {
+        // 這裡可以實現卡片效果的邏輯
+        Debug.Log("Player id: " + playerID + " Use Card: " + cardID);
+        //從 CardAbilityDataList 中找到對應ID的卡片效果
+        CardAbilityData cardAbilityData = CardAbilityDataList.Find(x => x.ID == cardID);
+        GameManager.Instance.uiManager.ShowLog("Player id: " + playerID + " Use Card: " + cardAbilityData.Name);
+        switch (cardAbilityData.ID)
+        {
+            case 0:
+                //卡片效果 跳過抽披薩階段
+                passThisTurn = true;
+                HappyAction?.Invoke(playerID);
+                break;
+            case 1:
+                //卡片效果 除了自己以外的player的DrawPizzaCount+1
+                for (int i = 0; i < Players.Count; i++)
+                {
+                    if (Players[i].ID != playerID)
+                    {
+                        Players[i].DrawPizzaCount++;
+                    }
+                }
+                HappyAction?.Invoke(playerID);
+                break;
+            case 2:
+                //卡片效果 補自己一次
+                AddHpAction?.Invoke(playerID);
+                break;
+            case 3:
+                //卡片效果 若抽到的披薩有辣，可以重抽
+                Players.Find(x => x.ID == playerID).CanRedrawPizza = true;
+                HappyAction?.Invoke(playerID);
+                break;
+        }
+        yield return new WaitForSeconds(cardAbilityData.showDelay);
+    }
+
+    public float GetCardDelay(int cardID)
+    {
+        CardAbilityData cardAbilityData = CardAbilityDataList.Find(x => x.ID == cardID);
+        return cardAbilityData.showDelay;
     }
 }

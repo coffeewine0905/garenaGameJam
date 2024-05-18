@@ -13,4 +13,6 @@ public class PlayerInputData : ScriptableObject
 
     public KeyCode Confirm;
     public List<AnimationReferenceAsset> Animations;
+    //抽披薩次數
+    public int DrawPizzaCount = 1;
 }
