@@ -1,0 +1,193 @@
+{ "skeleton": { "images": "C:/Users/yipang/Desktop/遊戲製作/Game Jam/辣披薩/1x/柯基/images/" },
+"PhotoshopToSpine": { "scale": 1, "padding": 1, "trim": true },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "尾巴", "bone": "root", "attachment": "尾巴" },
+	{ "name": "右腳", "bone": "root", "attachment": "右腳" },
+	{ "name": "身", "bone": "root", "attachment": "身" },
+	{ "name": "左腳", "bone": "root", "attachment": "左腳" },
+	{ "name": "右耳", "bone": "root", "attachment": "右耳" },
+	{ "name": "左耳", "bone": "root", "attachment": "左耳" },
+	{ "name": "臉", "bone": "root", "attachment": "臉" },
+	{ "name": "紅臉", "bone": "root", "attachment": "紅臉" },
+	{ "name": "下臉", "bone": "root", "attachment": "下臉" },
+	{ "name": "右閉眼", "bone": "root", "attachment": "右閉眼" },
+	{ "name": "右眼影子", "bone": "root", "attachment": "右眼影子" },
+	{ "name": "右眼白", "bone": "root", "attachment": "右眼白" },
+	{ "name": "右眼球", "bone": "root", "attachment": "右眼球" },
+	{ "name": "右眼光", "bone": "root", "attachment": "右眼光" },
+	{ "name": "右臉", "bone": "root", "attachment": "右臉" },
+	{ "name": "右眉", "bone": "root", "attachment": "右眉" },
+	{ "name": "左閉眼", "bone": "root", "attachment": "左閉眼" },
+	{ "name": "左眼影子", "bone": "root", "attachment": "左眼影子" },
+	{ "name": "左眼白", "bone": "root", "attachment": "左眼白" },
+	{ "name": "左眼球", "bone": "root", "attachment": "左眼球" },
+	{ "name": "左眼光", "bone": "root", "attachment": "左眼光" },
+	{ "name": "左臉", "bone": "root", "attachment": "左臉" },
+	{ "name": "左眉", "bone": "root", "attachment": "左眉" },
+	{ "name": "後嘴影子", "bone": "root", "attachment": "後嘴影子" },
+	{ "name": "上嘴影子", "bone": "root", "attachment": "上嘴影子" },
+	{ "name": "下嘴影子", "bone": "root", "attachment": "下嘴影子" },
+	{ "name": "後嘴", "bone": "root", "attachment": "後嘴" },
+	{ "name": "下嘴", "bone": "root", "attachment": "下嘴" },
+	{ "name": "口水 (2)", "bone": "root", "attachment": "口水 (2)" },
+	{ "name": "口水", "bone": "root", "attachment": "口水" },
+	{ "name": "舌", "bone": "root", "attachment": "舌" },
+	{ "name": "牙", "bone": "root", "attachment": "牙" },
+	{ "name": "上嘴", "bone": "root", "attachment": "上嘴" },
+	{ "name": "起司", "bone": "root", "attachment": "起司" },
+	{ "name": "牛奶", "bone": "root", "attachment": "牛奶" },
+	{ "name": "鼻子", "bone": "root", "attachment": "鼻子" },
+	{ "name": "胸毛", "bone": "root", "attachment": "胸毛" },
+	{ "name": "左手", "bone": "root", "attachment": "左手" },
+	{ "name": "左手前", "bone": "root", "attachment": "左手前" },
+	{ "name": "右手", "bone": "root", "attachment": "右手" },
+	{ "name": "杯後", "bone": "root", "attachment": "杯後" },
+	{ "name": "牛奶下", "bone": "root", "attachment": "牛奶下" },
+	{ "name": "牛奶上", "bone": "root", "attachment": "牛奶上" },
+	{ "name": "杯前", "bone": "root", "attachment": "杯前" },
+	{ "name": "右手前", "bone": "root", "attachment": "右手前" }
+],
+"skins": {
+	"default": {
+		"尾巴": {
+			"尾巴": { "x": 284, "y": -284, "width": 150, "height": 142 }
+		},
+		"右腳": {
+			"右腳": { "x": 99.5, "y": -339, "width": 97, "height": 68 }
+		},
+		"身": {
+			"身": { "x": 193, "y": -262.5, "width": 228, "height": 217 }
+		},
+		"左腳": {
+			"左腳": { "x": 283.5, "y": -337, "width": 117, "height": 76 }
+		},
+		"右耳": {
+			"右耳": { "x": 131.5, "y": -102.5, "width": 103, "height": 133 }
+		},
+		"左耳": {
+			"左耳": { "x": 229.5, "y": -98.5, "width": 115, "height": 143 }
+		},
+		"臉": {
+			"臉": { "x": 184.5, "y": -167, "width": 223, "height": 150 }
+		},
+		"紅臉": {
+			"紅臉": { "x": 181, "y": -169.5, "width": 184, "height": 141 }
+		},
+		"下臉": {
+			"下臉": { "x": 175.5, "y": -207, "width": 145, "height": 74 }
+		},
+		"右閉眼": {
+			"右閉眼": { "x": 122.5, "y": -157, "width": 55, "height": 32 }
+		},
+		"右眼影子": {
+			"右眼影子": { "x": 122, "y": -159, "width": 58, "height": 60 }
+		},
+		"右眼白": {
+			"右眼白": { "x": 124.5, "y": -161.5, "width": 53, "height": 55 }
+		},
+		"右眼球": {
+			"右眼球": { "x": 123, "y": -160.5, "width": 46, "height": 49 }
+		},
+		"右眼光": {
+			"右眼光": { "x": 139, "y": -153.5, "width": 16, "height": 19 }
+		},
+		"右臉": {
+			"右臉": { "x": 130, "y": -202, "width": 116, "height": 72 }
+		},
+		"右眉": {
+			"右眉": { "x": 125, "y": -122, "width": 28, "height": 18 }
+		},
+		"左閉眼": {
+			"左閉眼": { "x": 229, "y": -156, "width": 58, "height": 32 }
+		},
+		"左眼影子": {
+			"左眼影子": { "x": 229, "y": -158.5, "width": 60, "height": 59 }
+		},
+		"左眼白": {
+			"左眼白": { "x": 226.5, "y": -161, "width": 55, "height": 54 }
+		},
+		"左眼球": {
+			"左眼球": { "x": 227, "y": -161.5, "width": 48, "height": 47 }
+		},
+		"左眼光": {
+			"左眼光": { "x": 240.5, "y": -149.5, "width": 21, "height": 19 }
+		},
+		"左臉": {
+			"左臉": { "x": 237, "y": -200, "width": 118, "height": 72 }
+		},
+		"左眉": {
+			"左眉": { "x": 232.5, "y": -120.5, "width": 33, "height": 19 }
+		},
+		"後嘴影子": {
+			"後嘴影子": { "x": 172.5, "y": -193, "width": 63, "height": 52 }
+		},
+		"上嘴影子": {
+			"上嘴影子": { "x": 174.5, "y": -189.5, "width": 109, "height": 47 }
+		},
+		"下嘴影子": {
+			"下嘴影子": { "x": 172.5, "y": -202, "width": 61, "height": 46 }
+		},
+		"後嘴": {
+			"後嘴": { "x": 172.5, "y": -192, "width": 55, "height": 46 }
+		},
+		"下嘴": {
+			"下嘴": { "x": 172.5, "y": -197.5, "width": 51, "height": 41 }
+		},
+		"口水 (2)": {
+			"口水 (2)": { "x": 205.5, "y": -201, "width": 29, "height": 38 }
+		},
+		"口水": {
+			"口水": { "x": 185.5, "y": -203, "width": 25, "height": 26 }
+		},
+		"舌": {
+			"舌": { "x": 199.5, "y": -209, "width": 33, "height": 38 }
+		},
+		"牙": {
+			"牙": { "x": 172.5, "y": -203.5, "width": 49, "height": 15 }
+		},
+		"上嘴": {
+			"上嘴": { "x": 174.5, "y": -184, "width": 97, "height": 42 }
+		},
+		"起司": {
+			"起司": { "x": 177.5, "y": -191, "width": 103, "height": 30 }
+		},
+		"牛奶": {
+			"牛奶": { "x": 178, "y": -191.5, "width": 104, "height": 31 }
+		},
+		"鼻子": {
+			"鼻子": { "x": 174, "y": -177, "width": 40, "height": 34 }
+		},
+		"胸毛": {
+			"胸毛": { "x": 168.5, "y": -267.5, "width": 37, "height": 83 }
+		},
+		"左手": {
+			"左手": { "x": 228, "y": -336, "width": 60, "height": 88 }
+		},
+		"左手前": {
+			"左手前": { "x": 234, "y": -359.5, "width": 72, "height": 47 }
+		},
+		"右手": {
+			"右手": { "x": 114.5, "y": -340, "width": 55, "height": 84 }
+		},
+		"杯後": {
+			"杯後": { "x": 341, "y": -85.5, "width": 74, "height": 99 }
+		},
+		"牛奶下": {
+			"牛奶下": { "x": 340.5, "y": -102, "width": 59, "height": 56 }
+		},
+		"牛奶上": {
+			"牛奶上": { "x": 340.5, "y": -76.5, "width": 57, "height": 23 }
+		},
+		"杯前": {
+			"杯前": { "x": 341, "y": -59.5, "width": 74, "height": 19 }
+		},
+		"右手前": {
+			"右手前": { "x": 107, "y": -361, "width": 68, "height": 44 }
+		}
+	}
+},
+"animations": { "animation": {} }
+}
