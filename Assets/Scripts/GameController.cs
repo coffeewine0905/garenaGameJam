@@ -77,6 +77,9 @@ public class GameController : MonoBehaviour
     }
     IEnumerator AddCardPhase()
     {
+        //顯示log 加了幾片辣椒
+        GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " Spice!!!");
+        yield return new WaitForSeconds(1.6f);
         // 為所有玩家抽取對應數量的卡片
         GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " cards");
         foreach (var player in Players)
@@ -227,6 +230,7 @@ public class GameController : MonoBehaviour
     {
         // 判斷遊戲結束邏輯
         Debug.Log("Game Over");
+        CurrentGameState = GameState.End;
         OnGameEnd?.Invoke(Players[currentPlayerIndex]);
     }
 
@@ -234,6 +238,7 @@ public class GameController : MonoBehaviour
     {
         // 重置遊戲數據
         currentPlayerIndex = 0;
+        Players.Clear();
         ReStartAction?.Invoke();
         StartGame();
     }
