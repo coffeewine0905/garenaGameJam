@@ -18,11 +18,13 @@ public class PlayerController : MonoBehaviour
     public PlayerInputData playerInputData;
     public Transform cardRoot;
     public GameObject cardPrefab;
+    public List<GameObject> hpList = new List<GameObject>();
     private Player player;
     private List<CardController> cardControllers = new List<CardController>();
     private int currentCardIndex = 0;
     private bool myTurn = false;
     private int maxHealth = 0;
+    private bool hasGetPizza = false;
 
     public void Init(GameController gameController)
     {
@@ -72,7 +74,11 @@ public class PlayerController : MonoBehaviour
                     CardAction();
                     break;
                 case GameState.GetPizza:
-                    GetPizzaAction();
+                    if (!hasGetPizza)
+                    {
+                        hasGetPizza = true;
+                        GetPizzaAction();
+                    }
                     break;
                 case GameState.ShowPizza:
                     break;
@@ -89,19 +95,34 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator ShowPizza(PizzaData pizzaData)
     {
-        yield return new WaitForSeconds(1);
+        GameManager.Instance.uiManager.ShowLog("Show Your Pizza!!");
+        yield return new WaitForSeconds(1.6f);
         //TODO 做一些顯示披薩、吃披薩的動畫
         if (pizzaData.IsSpicy)
         {
             Debug.Log("Pizza is spicy");
+            GameManager.Instance.uiManager.ShowLog("Pizza is spicy~~~");
             player.Health--;
+            for (int i = 0; i < hpList.Count; i++)
+            {
+                if (i < player.Health)
+                {
+                    hpList[i].SetActive(true);
+                }
+                else
+                {
+                    hpList[i].SetActive(false);
+                }
+            }
         }
         else
         {
             Debug.Log("Pizza is not spicy");
+            GameManager.Instance.uiManager.ShowLog("SAFE!!");
         }
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.6f);
         myTurn = false;
+        hasGetPizza = false;
         gameController.EndTurn();
     }
 
@@ -217,17 +238,12 @@ public class PlayerController : MonoBehaviour
 
     public void IncreaseSpice()
     {
-        gameController.currentSpice++;
-        Debug.Log("IncreaseSpice: " + gameController.currentSpice);
+        gameController.IncreaseSpice();
     }
 
     public void DecreaseSpice()
     {
-        if (gameController.currentSpice > 0)
-        {
-            gameController.currentSpice--;
-            Debug.Log("DecreaseSpice: " + gameController.currentSpice);
-        }
+        gameController.DecreaseSpice();
     }
 
     public void ConfirmSpice()
@@ -239,6 +255,7 @@ public class PlayerController : MonoBehaviour
     public void Reset()
     {
         myTurn = false;
+        hasGetPizza = false;
         currentCardIndex = 0;
         player.Health = maxHealth;
         ClearCards();

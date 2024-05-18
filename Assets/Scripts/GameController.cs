@@ -47,25 +47,42 @@ public class GameController : MonoBehaviour
         }
         //產生一個披薩PizzaPrefab在PizzaParent下
         pizza = Instantiate(PizzaPrefab, PizzaParent);
+        //隨機對 PizzaArray 中的一個披薩設定為辣
+        PizzaArray[UnityEngine.Random.Range(0, PizzaArray.Count)].IsSpicy = true;
 
     }
 
     public void ConfirmSpice()
     {
-        // 隨機選擇一片披薩並設置為辣
-        int randomIndex = UnityEngine.Random.Range(0, PizzaArray.Count);
-        PizzaArray[randomIndex].IsSpicy = true;
+        // 根據currentSpice次數隨機對中披薩設定為辣
+        for (int i = 0; i < currentSpice; i++)
+        {
+            foreach (var pizza in PizzaArray)
+            {
+                if (pizza.IsSpicy == false)
+                {
+                    pizza.IsSpicy = true;
+                    break;
+                }
+            }
+        }
+        StartCoroutine(AddCardPhase());
 
+
+    }
+    IEnumerator AddCardPhase()
+    {
         // 為所有玩家抽取對應數量的卡片
+        GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " cards");
         foreach (var player in Players)
         {
             player.Hand.AddRange(DrawCards(currentSpice));
             player.RefreshCardAction?.Invoke();
         }
-
+        currentSpice = 0;
+        yield return new WaitForSeconds(1.6f);
         // 進入使用卡片環節
         StartCardUsagePhase();
-
     }
 
     void InitializeCardDeck()
@@ -92,8 +109,14 @@ public class GameController : MonoBehaviour
         ShowCardAction?.Invoke();
         InitializePizza();
 
+        StartCoroutine(StartGameCoroutine());
+    }
+    IEnumerator StartGameCoroutine()
+    {
         //TODO: 前置作業
         CurrentGameState = GameState.Start;
+        GameManager.Instance.uiManager.ShowLog("Game Start");
+        yield return new WaitForSeconds(1.6f);
         StartPlayerTurn();
     }
 
@@ -111,8 +134,13 @@ public class GameController : MonoBehaviour
 
     public void StartCardUsagePhase()
     {
-        // 等待玩家選擇並使用卡片
-        // 這裡可以實現玩家選擇卡片的邏輯
+        StartCoroutine(StartCardUsagePhaseCoroutine());
+    }
+    IEnumerator StartCardUsagePhaseCoroutine()
+    {
+        GameManager.Instance.uiManager.ShowLog("Start Card Usage Phase");
+        yield return new WaitForSeconds(1.6f);
+        // 進入選擇卡片環節
         CurrentGameState = GameState.CardAction;
         CardStartAction?.Invoke(Players[currentPlayerIndex].ID);
     }
@@ -126,8 +154,13 @@ public class GameController : MonoBehaviour
 
     public void StartShowPizzaPhase()
     {
-        // 等待玩家選擇披薩
-        // 這裡可以實現玩家選擇披薩的邏輯
+        StartCoroutine(StartShowPizzaPhaseCoroutine());
+    }
+    IEnumerator StartShowPizzaPhaseCoroutine()
+    {
+        GameManager.Instance.uiManager.ShowLog("Start Show Pizza Phase");
+        yield return new WaitForSeconds(1.6f);
+        // 進入表演吃披薩環節
         CurrentGameState = GameState.ShowPizza;
     }
 
@@ -145,6 +178,17 @@ public class GameController : MonoBehaviour
         Debug.Log("Player " + currentPlayerID + " turn start");
         TurnStartAction?.Invoke(currentPlayerID);
 
+
+        StartCoroutine(StartPlayerChooseSpiceCoroutine());
+    }
+
+    IEnumerator StartPlayerChooseSpiceCoroutine()
+    {
+        int currentPlayerID = Players[currentPlayerIndex].ID;
+        GameManager.Instance.uiManager.ShowLog("Player " + currentPlayerID + " turn start");
+        yield return new WaitForSeconds(1.6f);
+        GameManager.Instance.uiManager.ShowLog("Player id: " + currentPlayerID + " ChooseSpice");
+        yield return new WaitForSeconds(1.6f);
         // 進入選擇辣椒環節
         CurrentGameState = GameState.ChooseSpice;
         Debug.Log("Player id: " + currentPlayerID + " ChooseSpice");
@@ -176,5 +220,22 @@ public class GameController : MonoBehaviour
         currentPlayerIndex = 0;
         ReStartAction?.Invoke();
         StartGame();
+    }
+
+    public void IncreaseSpice()
+    {
+        currentSpice++;
+        Debug.Log("IncreaseSpice: " + currentSpice);
+        GameManager.Instance.uiManager.ShowLog("IncreaseSpice: " + currentSpice);
+    }
+
+    public void DecreaseSpice()
+    {
+        if (currentSpice > 0)
+        {
+            currentSpice--;
+            Debug.Log("DecreaseSpice: " + currentSpice);
+            GameManager.Instance.uiManager.ShowLog("DecreaseSpice: " + currentSpice);
+        }
     }
 }

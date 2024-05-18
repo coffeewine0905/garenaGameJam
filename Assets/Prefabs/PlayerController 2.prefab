@@ -49,6 +49,10 @@ MonoBehaviour:
   playerInputData: {fileID: 11400000, guid: c3f8cf1a90885664c9b29d9b10d05ec0, type: 2}
   cardRoot: {fileID: 1323294726321699655}
   cardPrefab: {fileID: 8166271710471778077, guid: 2c877d83716a37c438ad67fb47b27dcb, type: 3}
+  hpList:
+  - {fileID: 1083085191869267909}
+  - {fileID: 8408826485353152608}
+  - {fileID: 4446698983728792704}
 --- !u!1 &1083085191869267909
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,9 +315,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5777466546332219944}
-  - {fileID: 6675969616080551879}
   - {fileID: 6220385771320927110}
+  - {fileID: 6675969616080551879}
+  - {fileID: 5777466546332219944}
   m_Father: {fileID: 1407236546995789035}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6718718293788606016
