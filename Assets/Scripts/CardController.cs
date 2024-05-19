@@ -45,4 +45,9 @@ public class CardController : MonoBehaviour
     {
         OnUseAction = null;
     }
+
+    public bool isEmpty()
+    {
+        return cardData == null;
+    }
 }

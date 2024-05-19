@@ -29,6 +29,7 @@ public class PlayerManager : MonoBehaviour
                 GameObject go = Instantiate(playerPrefab);
                 PlayerController playerCo = go.GetComponent<PlayerController>();
                 playerCo.Init(GameManager.Instance.gameController);
+                playerCo.SetCardDealer(playerController.playerInputData.id == 1 ? GameManager.Instance.cardUIManager.LeftCardDealer : GameManager.Instance.cardUIManager.RightCardDealer);
             }
         }
     }

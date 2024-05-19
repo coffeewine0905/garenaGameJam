@@ -85,8 +85,18 @@ public class GameController : MonoBehaviour
         GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " cards");
         foreach (var player in Players)
         {
-            player.Hand.AddRange(DrawCards(currentSpice));
-            player.RefreshCardAction?.Invoke();
+            //檢查玩家手牌是否超過4張，滿的話不補
+            if (player.Hand.Count < 4)
+            {
+                //算出玩家可以補的卡片數量
+                int count = 4 - player.Hand.Count;
+                //如果currentSpice大於count，則補count張卡片
+                if (currentSpice > count)
+                {
+                    player.Hand.AddRange(DrawCards(count));
+                }
+                player.RefreshCardAction?.Invoke();
+            }
         }
         currentSpice = 0;
         yield return new WaitForSeconds(1.6f);
@@ -102,7 +112,8 @@ public class GameController : MonoBehaviour
             {
                 ID = CardAbilityDataList[i].ID,
                 Name = CardAbilityDataList[i].Name,
-                Description = CardAbilityDataList[i].Description
+                Description = CardAbilityDataList[i].Description,
+                Image = CardAbilityDataList[i].Image
             });
         }
     }
