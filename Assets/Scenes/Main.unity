@@ -1007,7 +1007,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c3e01e8c8787d294aadf91280119538e, type: 2}
   pizzaAnimator: {fileID: 998907083}
   currentSpice: 0
-  spiceMaxLimit: 3
+  addSpiceMaxLimit: 3
+  totalSpiceMaxLimit: 10
 --- !u!4 &501578878
 Transform:
   m_ObjectHideFlags: 0
@@ -1784,7 +1785,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -5
   m_Sprite: {fileID: 21300000, guid: 58a3a6ebba3b0bc43b8fc841b35c5136, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
