@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
     public Action<int> HappyAction;
     public Action ResetAction;
     public GameState CurrentGameState { get; set; }
+    public GameObject pizzaGameObject;
     public int currentSpice = 0;
     public int addSpiceMaxLimit = 3;
     public int totalSpiceMaxLimit = 10;
@@ -182,6 +184,7 @@ public class GameController : MonoBehaviour
         CurrentGameState = GameState.Start;
         GameManager.Instance.uiManager.ShowLog("Game Start");
         yield return new WaitForSeconds(1.6f);
+        pizzaAnimator.enabled = false;
         StartPlayerTurn();
     }
 
@@ -285,6 +288,7 @@ public class GameController : MonoBehaviour
         // 判斷遊戲結束邏輯
         Debug.Log("Game Over");
         CurrentGameState = GameState.End;
+
         OnGameEnd?.Invoke(Players[currentPlayerIndex]);
     }
 
@@ -294,6 +298,7 @@ public class GameController : MonoBehaviour
         currentPlayerIndex = 0;
         totalSpice = 0;
         currentSpice = 0;
+        pizzaAnimator.enabled = true;
         Players.Clear();
         ResetAction?.Invoke();
     }
@@ -373,5 +378,16 @@ public class GameController : MonoBehaviour
     {
         CardAbilityData cardAbilityData = CardAbilityDataList.Find(x => x.ID == cardID);
         return cardAbilityData.showDelay;
+    }
+
+    public void ShowPizzaSpin()
+    {
+        //彈跳披薩
+        pizzaGameObject.transform.DOLocalMoveY(0.1f, 0.4f).SetEase(Ease.InSine).onComplete += () =>
+        {
+            pizzaGameObject.transform.DOLocalMoveY(0, 0.2f).SetEase(Ease.OutBounce);
+            //披薩旋轉
+            pizzaGameObject.transform.DORotate(new Vector3(0, 360, 0), 0.8f, RotateMode.FastBeyond360).SetEase(Ease.OutCubic).SetLoops(1, LoopType.Incremental);
+        };
     }
 }

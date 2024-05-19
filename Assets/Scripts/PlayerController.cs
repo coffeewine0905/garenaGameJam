@@ -174,6 +174,7 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.uiManager.ShowLog("Show Your Pizza!!");
         yield return new WaitForSeconds(1.6f);
+        gameController.ShowPizzaSpin();
         spineAnimationCtrl.GetSpineAnime.state.SetAnimation(0, "nervous", false);
         spineAnimationCtrl.AddSpineAnima("eat pizza", false);
         spineAnimationCtrl.AddSpineAnima("standby", true);
