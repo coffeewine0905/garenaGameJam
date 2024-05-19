@@ -9,13 +9,14 @@ public class GameController : MonoBehaviour
 {
     public UnityEvent OnGameStart;
     public UnityEvent<Player> OnGameEnd;
-    public GameObject PizzaPrefab;
+    // public GameObject PizzaPrefab;
     public Transform PizzaParent;
     public List<PizzaData> PizzaArray = new List<PizzaData>();
     public List<CardData> CardDeck = new List<CardData>();
     public List<Player> Players = new List<Player>();
     public System.Action ShowCardAction;
     public List<CardAbilityData> CardAbilityDataList = new List<CardAbilityData>();
+    public Animator pizzaAnimator;
 
     private int currentPlayerIndex = 0;
     private GameObject pizza;
@@ -50,11 +51,11 @@ public class GameController : MonoBehaviour
         {
             PizzaArray.Add(new PizzaData());
         }
-        //產生一個披薩PizzaPrefab在PizzaParent下
-        pizza = Instantiate(PizzaPrefab, PizzaParent);
+        // //產生一個披薩PizzaPrefab在PizzaParent下
+        // pizza = Instantiate(PizzaPrefab, PizzaParent);
         //隨機對 PizzaArray 中的一個披薩設定為辣
         PizzaArray[UnityEngine.Random.Range(0, PizzaArray.Count)].IsSpicy = true;
-
+        pizzaAnimator.Play("披薩出場");
     }
 
     public void ConfirmSpice()
