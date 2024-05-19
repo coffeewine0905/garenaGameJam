@@ -334,11 +334,13 @@ public class GameController : MonoBehaviour
         switch (cardAbilityData.ID)
         {
             case 0:
+                GameManager.Instance.audioManager.PlaySound("chime_bell_positive_ring_01", 0.6f);
                 //卡片效果 跳過抽披薩階段
                 passThisTurn = true;
                 HappyAction?.Invoke(playerID);
                 break;
             case 1:
+                GameManager.Instance.audioManager.PlaySound("Ambient_Game_Bass_Coin_Pick_Up_2", 0.6f);
                 //卡片效果 除了自己以外的player的DrawPizzaCount+1
                 for (int i = 0; i < Players.Count; i++)
                 {
@@ -352,10 +354,12 @@ public class GameController : MonoBehaviour
 
                 break;
             case 2:
+                GameManager.Instance.audioManager.PlaySound("comedy_creature_human_slurp_food_drink_01", 0.8f);
                 //卡片效果 補自己一次
                 AddHpAction?.Invoke(playerID);
                 break;
             case 3:
+                GameManager.Instance.audioManager.PlaySound("Ambient_Game_Pickup_Item_Ancient_Treasure_1", 0.6f);
                 //卡片效果 若抽到的披薩有辣，可以重抽
                 Players.Find(x => x.ID == playerID).CanRedrawPizza = true;
                 HappyAction?.Invoke(playerID);
