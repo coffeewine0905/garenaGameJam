@@ -62,6 +62,7 @@ public class GameController : MonoBehaviour
         GameManager.Instance.uiManager.SetTotalChiliValue(totalSpice);
         PizzaArray[UnityEngine.Random.Range(0, PizzaArray.Count)].IsSpicy = true;
         pizzaAnimator.Play("披薩出場");
+        GameManager.Instance.audioManager.PlaySound("Card_Game_Action_Push_Wind_02");
     }
 
     public void ConfirmSpice()
