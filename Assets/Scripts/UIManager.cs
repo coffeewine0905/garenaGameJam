@@ -17,8 +17,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI endText;
     public GameObject logPrefab;
     public Transform logParent;
+    public Image AddChiliImage;
+    public Image NowChiliImage;
+    public Image TotalChiliImage;
+    public Image DrawCardImage;
     private List<GameObject> logPool = new List<GameObject>();
     private GameObject currentLog;
+    private int currentChiliValue = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +66,38 @@ public class UIManager : MonoBehaviour
                 Destroy(go);
             };
         });
+    }
+
+    public void SetAddChiliImage(bool active)
+    {
+        //如果active為true，則顏色為白色，否則為灰色
+        AddChiliImage.color = active ? Color.white : Color.gray;
+        //比例為1.2倍
+        AddChiliImage.transform.localScale = active ? new Vector3(1.2f, 1.2f, 1.2f) : new Vector3(1, 1, 1);
+        NowChiliImage.gameObject.SetActive(active);
+        if (!active)
+        {
+            SetNowChiliValue(0);
+        }
+    }
+
+    public void SetTotalChiliValue(int value)
+    {
+        TotalChiliImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = value.ToString();
+    }
+
+    public void SetNowChiliValue(int value)
+    {
+        currentChiliValue = value;
+        NowChiliImage.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = value.ToString();
+    }
+
+    public void SetDrawCardImage(bool active)
+    {
+        //如果active為true，則顏色為白色，否則為灰色
+        DrawCardImage.color = active ? Color.white : Color.gray;
+        //比例為1.2倍
+        DrawCardImage.transform.localScale = active ? new Vector3(1.2f, 1.2f, 1.2f) : new Vector3(1, 1, 1);
     }
 
     public void ShowTurnUI(int id)

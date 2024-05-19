@@ -28,6 +28,9 @@ public class GameController : MonoBehaviour
     public Action ReStartAction;
     public GameState CurrentGameState { get; set; }
     public int currentSpice = 0;
+    public int addSpiceMaxLimit = 3;
+    public int totalSpiceMaxLimit = 10;
+    private int totalSpice = 0;
 
     private bool passThisTurn = false;
 
@@ -47,13 +50,15 @@ public class GameController : MonoBehaviour
         {
             PizzaArray.Clear();
         }
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < totalSpiceMaxLimit; i++)
         {
             PizzaArray.Add(new PizzaData());
         }
         // //產生一個披薩PizzaPrefab在PizzaParent下
         // pizza = Instantiate(PizzaPrefab, PizzaParent);
         //隨機對 PizzaArray 中的一個披薩設定為辣
+        totalSpice += 1;
+        GameManager.Instance.uiManager.SetTotalChiliValue(totalSpice);
         PizzaArray[UnityEngine.Random.Range(0, PizzaArray.Count)].IsSpicy = true;
         pizzaAnimator.Play("披薩出場");
     }
@@ -78,32 +83,51 @@ public class GameController : MonoBehaviour
     }
     IEnumerator AddCardPhase()
     {
+        GameManager.Instance.uiManager.SetAddChiliImage(false);
+        totalSpice += currentSpice;
+        if (totalSpice > totalSpiceMaxLimit)
+        {
+            totalSpice = totalSpiceMaxLimit;
+        }
         //顯示log 加了幾片辣椒
         GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " Spice!!!");
+        GameManager.Instance.uiManager.SetTotalChiliValue(totalSpice);
         yield return new WaitForSeconds(1.6f);
+        GameManager.Instance.uiManager.SetDrawCardImage(true);
         // 為所有玩家抽取對應數量的卡片
-        GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " cards");
-        foreach (var player in Players)
+        if (currentSpice == 0)
         {
-            //檢查玩家手牌是否超過4張，滿的話不補
-            if (player.Hand.Count < 4)
-            {
-                //算出玩家可以補的卡片數量
-                int count = 4 - player.Hand.Count;
-                //如果currentSpice大於count，則補count張卡片
-                if (currentSpice > count)
-                {
-                    player.Hand.AddRange(DrawCards(count));
-                }
-                else
-                {
-                    player.Hand.AddRange(DrawCards(currentSpice));
-                }
-                player.RefreshCardAction?.Invoke();
-            }
+            GameManager.Instance.uiManager.ShowLog("No More Cards");
         }
-        currentSpice = 0;
+        else
+        {
+            GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " cards");
+        }
+        if (currentSpice > 0 && totalSpice != totalSpiceMaxLimit)
+        {
+            foreach (var player in Players)
+            {
+                //檢查玩家手牌是否超過4張，滿的話不補
+                if (player.Hand.Count < 4)
+                {
+                    //算出玩家可以補的卡片數量
+                    int count = 4 - player.Hand.Count;
+                    //如果currentSpice大於count，則補count張卡片
+                    if (currentSpice > count)
+                    {
+                        player.Hand.AddRange(DrawCards(count));
+                    }
+                    else
+                    {
+                        player.Hand.AddRange(DrawCards(currentSpice));
+                    }
+                    player.RefreshCardAction?.Invoke();
+                }
+            }
+            currentSpice = 0;
+        }
         yield return new WaitForSeconds(1.6f);
+        GameManager.Instance.uiManager.SetDrawCardImage(false);
         // 進入使用卡片環節
         StartCardUsagePhase();
     }
@@ -171,6 +195,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(1.6f);
         // 進入選擇辣椒環節
         CurrentGameState = GameState.ChooseSpice;
+        GameManager.Instance.uiManager.SetAddChiliImage(true);
         Debug.Log("Player id: " + currentPlayerID + " ChooseSpice");
     }
 
@@ -255,6 +280,8 @@ public class GameController : MonoBehaviour
     {
         // 重置遊戲數據
         currentPlayerIndex = 0;
+        totalSpice = 0;
+        currentSpice = 0;
         Players.Clear();
         ReStartAction?.Invoke();
         StartGame();
@@ -263,6 +290,11 @@ public class GameController : MonoBehaviour
     public void IncreaseSpice()
     {
         currentSpice++;
+        if (currentSpice > addSpiceMaxLimit)
+        {
+            currentSpice = addSpiceMaxLimit;
+        }
+        GameManager.Instance.uiManager.SetNowChiliValue(currentSpice);
         Debug.Log("IncreaseSpice: " + currentSpice);
         GameManager.Instance.uiManager.ShowLog("IncreaseSpice: " + currentSpice);
     }
@@ -272,9 +304,10 @@ public class GameController : MonoBehaviour
         if (currentSpice > 0)
         {
             currentSpice--;
-            Debug.Log("DecreaseSpice: " + currentSpice);
-            GameManager.Instance.uiManager.ShowLog("DecreaseSpice: " + currentSpice);
         }
+        GameManager.Instance.uiManager.SetNowChiliValue(currentSpice);
+        Debug.Log("DecreaseSpice: " + currentSpice);
+        GameManager.Instance.uiManager.ShowLog("DecreaseSpice: " + currentSpice);
     }
     public void UseCard(int cardID, int playerID)
     {
