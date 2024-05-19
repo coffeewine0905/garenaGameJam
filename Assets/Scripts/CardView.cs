@@ -19,9 +19,17 @@ public class CardView : MonoBehaviour
 
     }
 
-    public void Init(CardData cardData, bool sortX)
+    public virtual void Reset()
     {
-        cardText.text = cardData.Name;
+        // cardData = null;
+        if (cardText != null)
+            cardText.text = "";
+    }
+
+    public virtual void Init(CardData cardData, bool sortX)
+    {
+        if (cardText != null)
+            cardText.text = cardData.Name;
         // this.cardData = cardData;
         if (sortX)
         {
@@ -35,13 +43,13 @@ public class CardView : MonoBehaviour
         }
     }
 
-    public void OnSelect()
+    public virtual void OnSelect()
     {
         //選擇卡片時，將卡片往上移動
         transform.localPosition += new Vector3(0, OnSelectOffset, 0);
     }
 
-    public void OnDeselect()
+    public virtual void OnDeselect()
     {
         //取消選擇卡片時，將卡片回到原點
         transform.localPosition = new Vector3(0, 0, 0);

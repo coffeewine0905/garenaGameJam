@@ -16,3 +16,4 @@ MonoBehaviour:
   Name: "\u559D\u725B\u5976"
   Description: "\u88DC\u4E00\u500B\u611B\u5FC3"
   showDelay: 3.7
+  Image: {fileID: 21300000, guid: 22bead93936ea1d40ba2795a836010fc, type: 3}

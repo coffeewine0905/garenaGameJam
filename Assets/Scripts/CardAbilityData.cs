@@ -8,4 +8,5 @@ public class CardAbilityData : ScriptableObject
     public string Name;
     public string Description;
     public float showDelay = 1f;
+    public Sprite Image;
 }

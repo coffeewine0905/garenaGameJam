@@ -19,9 +19,11 @@ MonoBehaviour:
   MoveRight: 260
   Confirm: 271
   Animations:
-  - {fileID: 11400000, guid: 18f1b2c2033f2304a85156e73b43a3a4, type: 2}
-  - {fileID: 11400000, guid: d907d37fb6ca6f84e8f7c8851f83699e, type: 2}
-  - {fileID: 11400000, guid: e0ceeb2659538bd46b0d9182744732dc, type: 2}
-  - {fileID: 11400000, guid: b19b30e0d1532944d85b4a2f0f8adf20, type: 2}
-  - {fileID: 11400000, guid: ef3f4f9dbe87e87429b77b9d37bd68c0, type: 2}
-  - {fileID: 11400000, guid: 83de2fba2e048c24997d40b4e5fd4c40, type: 2}
+  - {fileID: 11400000, guid: e1555a35ff3a85840a26f40f84e11e6b, type: 2}
+  - {fileID: 11400000, guid: 89fbbb89cf261774b8645cdd83f3cb0d, type: 2}
+  - {fileID: 11400000, guid: 5a71d71b5c9647d4e8cdf1a8042372c0, type: 2}
+  - {fileID: 11400000, guid: 8bbaa9e447c8af64fa18d1f039080c15, type: 2}
+  - {fileID: 11400000, guid: a38280f6657e84146b9dafa741197948, type: 2}
+  - {fileID: 11400000, guid: 26d04633510a685489872626b1d7762e, type: 2}
+  - {fileID: 11400000, guid: 8ef7fa9e46fb5714bb513fc0558230e5, type: 2}
+  DrawPizzaCount: 1

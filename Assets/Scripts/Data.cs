@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 [Serializable]
 public class PizzaData
@@ -13,6 +14,7 @@ public class CardData
     public int ID { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+    public Sprite Image { get; set; }
 }
 [Serializable]
 public class Player

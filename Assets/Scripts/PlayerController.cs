@@ -25,14 +25,13 @@ public class PlayerController : MonoBehaviour
     public bool sortX = true;
     private Player player;
     private List<CardController> cardControllers = new List<CardController>();
-    private int currentCardIndex = 0;
-    private int lastCardIndex = -1;
     private bool myTurn = false;
     private int maxHealth = 0;
     private bool hasGetPizza = false;
     private float ShowPizzaDelay = 0;
     private float ShowHappyDelay = 0;
     private float ShowPepperyDelay = 0;
+    private CardDealer cardDealer;
 
     public void Init(GameController gameController)
     {
@@ -104,10 +103,14 @@ public class PlayerController : MonoBehaviour
         if (index == playerInputData.id)
         {
             Debug.Log("Player id: " + player.ID + " CardAction");
-            ChooseCard(currentCardIndex);
+            cardDealer.FocusCard();
         }
     }
 
+    public void SetCardDealer(CardDealer cardDealer)
+    {
+        this.cardDealer = cardDealer;
+    }
     public void TurnStart(int index)
     {
         if (index == playerInputData.id)
@@ -148,6 +151,7 @@ public class PlayerController : MonoBehaviour
     {
         PizzaData pizzaData = gameController.GetPizzaData();
         player.DrawPizzaCount--;
+        GameManager.Instance.uiManager.UpdateBuffUI(player.ID, 1, player.DrawPizzaCount);
         StartCoroutine(ShowPizza(pizzaData));
         gameController.StartShowPizzaPhase();
     }
@@ -163,6 +167,7 @@ public class PlayerController : MonoBehaviour
         if (pizzaData.IsSpicy && player.CanRedrawPizza)
         {
             player.CanRedrawPizza = false;
+            GameManager.Instance.uiManager.CloseBuffUI(player.ID, 0);
             GameManager.Instance.uiManager.ShowLog("You got spicy pizza but.....");
             yield return new WaitForSeconds(1.6f);
             GameManager.Instance.uiManager.ShowLog("Lucky! You can redraw pizza!!");
@@ -234,56 +239,32 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(playerInputData.MoveRight))
         {
-            currentCardIndex++;
-            ChooseCard(currentCardIndex);
+            cardDealer.ChooseRightCard();
         }
         if (Input.GetKeyDown(playerInputData.MoveLeft))
         {
-            currentCardIndex--;
-            ChooseCard(currentCardIndex);
+            cardDealer.ChooseLeftCard();
         }
         if (Input.GetKeyDown(playerInputData.Confirm))
         {
             UseCard();
         }
     }
-
-    private void ChooseCard(int index)
-    {
-
-        //檢查index是否超出範圍
-        if (index < 0)
-        {
-            currentCardIndex = 0;
-        }
-        else if (index >= player.Hand.Count)
-        {
-            currentCardIndex = player.Hand.Count - 1;
-        }
-
-        if (lastCardIndex != -1 && lastCardIndex != currentCardIndex && lastCardIndex < cardControllers.Count)
-        {
-            cardControllers[lastCardIndex].transform.localScale = Vector3.one;
-            cardControllers[lastCardIndex].OnDeselect();
-        }
-
-        cardControllers[currentCardIndex].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-        cardControllers[currentCardIndex].OnSelect();
-        lastCardIndex = currentCardIndex;
-    }
     private void UseCard()
     {
         float delay = 0;
-        delay = gameController.GetCardDelay(player.Hand[currentCardIndex].ID);
+        delay = gameController.GetCardDelay(player.Hand[cardDealer.GetCurrentCardIndex()].ID);
         //使用卡片
-        cardControllers[currentCardIndex].Use();
-        //刪除使用過的卡片
-        player.Hand.RemoveAt(currentCardIndex);
-        //刪除卡片UI
-        Destroy(cardControllers[currentCardIndex].gameObject);
-        cardControllers.RemoveAt(currentCardIndex);
-        //對玩家的卡片進行排序
-        SortCards();
+        int currentCardIndex = cardDealer.GetCurrentCardIndex();
+        cardDealer.UseCard();
+        // cardControllers[currentCardIndex].Use();
+        // //刪除使用過的卡片
+        // player.Hand.RemoveAt(currentCardIndex);
+        // //刪除卡片UI
+        // Destroy(cardControllers[currentCardIndex].gameObject);
+        // cardControllers.RemoveAt(currentCardIndex);
+        // //對玩家的卡片進行排序
+        // SortCards();
         //如果卡片使用完畢，則進入下一階段
         StartCoroutine(useCardCoroutine(delay));
     }
@@ -295,47 +276,51 @@ public class PlayerController : MonoBehaviour
     public void ShowCards()
     {
         Debug.Log("Show Cards player.Hand.Count: " + player.Hand.Count);
-        foreach (var card in player.Hand)
-        {
-            GameObject cardGo = Instantiate(cardPrefab, cardRoot);
-            CardController cardController = cardGo.GetComponent<CardController>();
-            cardController.OnUseAction += (cardId) =>
+        cardDealer.ShowCard(player.Hand, (cardId) =>
             {
                 gameController.UseCard(cardId, player.ID);
-            };
-            cardController.Init(card, sortX);
-            cardControllers.Add(cardController);
-        }
+            });
+        // foreach (var card in player.Hand)
+        // {
+        //     GameObject cardGo = Instantiate(cardPrefab, cardRoot);
+        //     CardController cardController = cardGo.GetComponent<CardController>();
+        //     cardController.OnUseAction += (cardId) =>
+        //     {
+        //         gameController.UseCard(cardId, player.ID);
+        //     };
+        //     cardController.Init(card, sortX);
+        //     cardControllers.Add(cardController);
+        // }
         //對玩家的卡片進行排序
-        SortCards();
+        // SortCards();
     }
 
     public void ClearCards()
     {
-        for (int i = 0; i < cardControllers.Count; i++)
-        {
-            Destroy(cardControllers[i].gameObject);
-        }
-        cardControllers.Clear();
+        // for (int i = 0; i < cardControllers.Count; i++)
+        // {
+        //     Destroy(cardControllers[i].gameObject);
+        // }
+        // cardControllers.Clear();
+        cardDealer.ClearCard();
     }
 
-    public void SortCards()
-    {
-        for (int i = 0; i < cardControllers.Count; i++)
-        {
-            //建立一個變數決定正負
-            float temp = sortX ? 1 : -1;
-            cardControllers[i].transform.localPosition = new Vector3(i * 0.2f * temp, 0, 0);
-        }
-    }
+    // public void SortCards()
+    // {
+    //     for (int i = 0; i < cardControllers.Count; i++)
+    //     {
+    //         //建立一個變數決定正負
+    //         float temp = sortX ? 1 : -1;
+    //         cardControllers[i].transform.localPosition = new Vector3(i * 0.2f * temp, 0, 0);
+    //     }
+    // }
 
     public void RefreshCard()
     {
-        if (player.Hand.Count != cardControllers.Count && player.Hand.Count > 0)
+        cardDealer.RefreshCard(player.Hand, (cardId) =>
         {
-            ClearCards();
-            ShowCards();
-        }
+            gameController.UseCard(cardId, player.ID);
+        });
     }
 
     public void IncreaseSpice()
@@ -358,7 +343,7 @@ public class PlayerController : MonoBehaviour
     {
         myTurn = false;
         hasGetPizza = false;
-        currentCardIndex = 0;
+        cardDealer.Reset();
         player.Health = maxHealth;
         ClearCards();
     }

@@ -29,6 +29,8 @@ public class CardController : MonoBehaviour
     public void Use()
     {
         OnUseAction?.Invoke(cardData.ID);
+        cardView.Reset();
+        cardView.OnDeselect();
     }
 
     public void OnSelect()
@@ -44,5 +46,10 @@ public class CardController : MonoBehaviour
     private void OnDestroy()
     {
         OnUseAction = null;
+    }
+
+    public bool isEmpty()
+    {
+        return cardData == null;
     }
 }
