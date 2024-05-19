@@ -19,6 +19,13 @@ public class CardView : MonoBehaviour
 
     }
 
+    public virtual void Reset()
+    {
+        // cardData = null;
+        if (cardText != null)
+            cardText.text = "";
+    }
+
     public virtual void Init(CardData cardData, bool sortX)
     {
         if (cardText != null)

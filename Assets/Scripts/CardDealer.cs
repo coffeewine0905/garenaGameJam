@@ -51,7 +51,6 @@ public class CardDealer : MonoBehaviour
 
     public void FocusCard()
     {
-        cardControllers[currentCardIndex].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
         cardControllers[currentCardIndex].OnSelect();
         lastCardIndex = currentCardIndex;
     }
@@ -87,21 +86,14 @@ public class CardDealer : MonoBehaviour
             cardControllers[lastCardIndex].OnDeselect();
         }
 
-        cardControllers[currentCardIndex].transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
         cardControllers[currentCardIndex].OnSelect();
         lastCardIndex = currentCardIndex;
     }
 
-    public void UseCard(int id)
+    public void UseCard()
     {
-        foreach (Transform card in CardParent)
-        {
-            if (card.GetComponent<CardController>().cardData.ID == id)
-            {
-                Destroy(card.gameObject);
-                break;
-            }
-        }
+        cardControllers[currentCardIndex].Use();
+        cardDatas.RemoveAt(currentCardIndex);
     }
 
     public void ClearCard()

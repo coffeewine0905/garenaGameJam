@@ -151,6 +151,7 @@ public class PlayerController : MonoBehaviour
     {
         PizzaData pizzaData = gameController.GetPizzaData();
         player.DrawPizzaCount--;
+        GameManager.Instance.uiManager.UpdateBuffUI(player.ID, 1, player.DrawPizzaCount);
         StartCoroutine(ShowPizza(pizzaData));
         gameController.StartShowPizzaPhase();
     }
@@ -166,6 +167,7 @@ public class PlayerController : MonoBehaviour
         if (pizzaData.IsSpicy && player.CanRedrawPizza)
         {
             player.CanRedrawPizza = false;
+            GameManager.Instance.uiManager.CloseBuffUI(player.ID, 0);
             GameManager.Instance.uiManager.ShowLog("You got spicy pizza but.....");
             yield return new WaitForSeconds(1.6f);
             GameManager.Instance.uiManager.ShowLog("Lucky! You can redraw pizza!!");
@@ -253,7 +255,8 @@ public class PlayerController : MonoBehaviour
         float delay = 0;
         delay = gameController.GetCardDelay(player.Hand[cardDealer.GetCurrentCardIndex()].ID);
         //使用卡片
-        cardDealer.UseCard(player.Hand[cardDealer.GetCurrentCardIndex()].ID);
+        int currentCardIndex = cardDealer.GetCurrentCardIndex();
+        cardDealer.UseCard();
         // cardControllers[currentCardIndex].Use();
         // //刪除使用過的卡片
         // player.Hand.RemoveAt(currentCardIndex);

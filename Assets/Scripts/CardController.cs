@@ -29,6 +29,8 @@ public class CardController : MonoBehaviour
     public void Use()
     {
         OnUseAction?.Invoke(cardData.ID);
+        cardView.Reset();
+        cardView.OnDeselect();
     }
 
     public void OnSelect()

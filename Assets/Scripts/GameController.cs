@@ -95,6 +95,10 @@ public class GameController : MonoBehaviour
                 {
                     player.Hand.AddRange(DrawCards(count));
                 }
+                else
+                {
+                    player.Hand.AddRange(DrawCards(currentSpice));
+                }
                 player.RefreshCardAction?.Invoke();
             }
         }
@@ -143,6 +147,31 @@ public class GameController : MonoBehaviour
         GameManager.Instance.uiManager.ShowLog("Game Start");
         yield return new WaitForSeconds(1.6f);
         StartPlayerTurn();
+    }
+
+    void StartPlayerTurn()
+    {
+        // 等待玩家操作
+        // 這裡可以實現玩家操作介面的顯示
+        int currentPlayerID = Players[currentPlayerIndex].ID;
+        Debug.Log("Player " + currentPlayerID + " turn start");
+        TurnStartAction?.Invoke(currentPlayerID);
+
+
+        StartCoroutine(StartPlayerChooseSpiceCoroutine());
+    }
+
+    IEnumerator StartPlayerChooseSpiceCoroutine()
+    {
+        int currentPlayerID = Players[currentPlayerIndex].ID;
+        GameManager.Instance.uiManager.ShowLog("Player " + currentPlayerID + " turn start");
+        GameManager.Instance.uiManager.ShowTurnUI(currentPlayerID);
+        yield return new WaitForSeconds(1.6f);
+        GameManager.Instance.uiManager.ShowLog("Player id: " + currentPlayerID + " ChooseSpice");
+        yield return new WaitForSeconds(1.6f);
+        // 進入選擇辣椒環節
+        CurrentGameState = GameState.ChooseSpice;
+        Debug.Log("Player id: " + currentPlayerID + " ChooseSpice");
     }
 
     internal List<CardData> DrawCards(int count)
@@ -200,30 +229,6 @@ public class GameController : MonoBehaviour
         return PizzaArray[UnityEngine.Random.Range(0, PizzaArray.Count)];
     }
 
-
-    void StartPlayerTurn()
-    {
-        // 等待玩家操作
-        // 這裡可以實現玩家操作介面的顯示
-        int currentPlayerID = Players[currentPlayerIndex].ID;
-        Debug.Log("Player " + currentPlayerID + " turn start");
-        TurnStartAction?.Invoke(currentPlayerID);
-
-
-        StartCoroutine(StartPlayerChooseSpiceCoroutine());
-    }
-
-    IEnumerator StartPlayerChooseSpiceCoroutine()
-    {
-        int currentPlayerID = Players[currentPlayerIndex].ID;
-        GameManager.Instance.uiManager.ShowLog("Player " + currentPlayerID + " turn start");
-        yield return new WaitForSeconds(1.6f);
-        GameManager.Instance.uiManager.ShowLog("Player id: " + currentPlayerID + " ChooseSpice");
-        yield return new WaitForSeconds(1.6f);
-        // 進入選擇辣椒環節
-        CurrentGameState = GameState.ChooseSpice;
-        Debug.Log("Player id: " + currentPlayerID + " ChooseSpice");
-    }
 
     public void EndTurn()
     {
@@ -296,9 +301,11 @@ public class GameController : MonoBehaviour
                     if (Players[i].ID != playerID)
                     {
                         Players[i].DrawPizzaCount++;
+                        GameManager.Instance.uiManager.ShowBuffUI(Players[i].ID, Players[i].DrawPizzaCount - 1);
                     }
                 }
                 HappyAction?.Invoke(playerID);
+
                 break;
             case 2:
                 //卡片效果 補自己一次
@@ -308,6 +315,7 @@ public class GameController : MonoBehaviour
                 //卡片效果 若抽到的披薩有辣，可以重抽
                 Players.Find(x => x.ID == playerID).CanRedrawPizza = true;
                 HappyAction?.Invoke(playerID);
+                GameManager.Instance.uiManager.ShowBuffUI(playerID, 0);
                 break;
         }
         yield return new WaitForSeconds(cardAbilityData.showDelay);
