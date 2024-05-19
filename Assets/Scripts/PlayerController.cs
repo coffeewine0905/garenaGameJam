@@ -103,7 +103,16 @@ public class PlayerController : MonoBehaviour
         if (index == playerInputData.id)
         {
             Debug.Log("Player id: " + player.ID + " CardAction");
-            cardDealer.FocusCard();
+            if (player.Hand.Count > 0)
+            {
+                cardDealer.FocusCard();
+            }
+            else
+            {
+                Debug.Log("Player id: " + player.ID + " No Card");
+                //如果卡片使用完畢，則進入下一階段
+                StartCoroutine(useCardCoroutine(0.2f));
+            }
         }
     }
 
