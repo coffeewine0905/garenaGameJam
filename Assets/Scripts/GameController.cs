@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     public System.Action ShowCardAction;
     public List<CardAbilityData> CardAbilityDataList = new List<CardAbilityData>();
     public Animator pizzaAnimator;
+    public GameObject peperObj;
 
     private int currentPlayerIndex = 0;
     private GameObject pizza;
@@ -77,12 +78,17 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-        StartCoroutine(AddCardPhase());
+        StartCoroutine(AddChiliAndCardPhase());
 
 
     }
-    IEnumerator AddCardPhase()
+    IEnumerator AddChiliAndCardPhase()
     {
+        if (currentSpice != 0)
+        {
+            peperObj.SetActive(true);
+        }
+
         GameManager.Instance.uiManager.SetAddChiliImage(false);
         totalSpice += currentSpice;
         if (totalSpice > totalSpiceMaxLimit)
@@ -93,6 +99,7 @@ public class GameController : MonoBehaviour
         GameManager.Instance.uiManager.ShowLog("Add " + currentSpice + " Spice!!!");
         GameManager.Instance.uiManager.SetTotalChiliValue(totalSpice);
         yield return new WaitForSeconds(1.6f);
+        peperObj.SetActive(false);
         GameManager.Instance.uiManager.SetDrawCardImage(true);
         // 為所有玩家抽取對應數量的卡片
         if (currentSpice == 0)
