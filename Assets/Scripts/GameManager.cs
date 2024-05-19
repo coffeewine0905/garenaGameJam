@@ -29,9 +29,10 @@ public class GameManager : Singleton<GameManager>
 
     public void RestartOffLine2Player()
     {
+        gameController.ResetGame();
         playerManager.ClearPlayer();
         playerManager.CreatePlayer(1);
         playerManager.CreatePlayer(2);
-        gameController.RestartGame();
+        gameController.StartGame();
     }
 }

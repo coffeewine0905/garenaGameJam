@@ -28,6 +28,10 @@ public class CardController : MonoBehaviour
 
     public void Use()
     {
+        if (cardData == null)
+        {
+            return;
+        }
         OnUseAction?.Invoke(cardData.ID);
         cardView.Reset();
         cardView.OnDeselect();

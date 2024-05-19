@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
         gameController.CardStartAction += CardStart;
         gameController.AddHpAction += AddHp;
         gameController.HappyAction += Happy;
-        gameController.ReStartAction += Reset;
+        gameController.ResetAction += Reset;
 
         int nervousIndex = playerInputData.Animations.FindIndex(x => x.name == "nervous");
         int eatPizzaIndex = playerInputData.Animations.FindIndex(x => x.name == "eat pizza");
@@ -253,7 +253,17 @@ public class PlayerController : MonoBehaviour
     private void UseCard()
     {
         float delay = 0;
-        delay = gameController.GetCardDelay(player.Hand[cardDealer.GetCurrentCardIndex()].ID);
+        int index = cardDealer.GetCurrentCardIndex();
+        //如果index 有在player.Hand範圍內
+        if (index >= 0 && index < player.Hand.Count)
+        {
+            delay = gameController.GetCardDelay(player.Hand[index].ID);
+        }
+        else
+        {
+            Debug.LogError("UseCard index out of range");
+            return;
+        }
         //使用卡片
         int currentCardIndex = cardDealer.GetCurrentCardIndex();
         cardDealer.UseCard();
@@ -353,6 +363,6 @@ public class PlayerController : MonoBehaviour
         gameController.ShowCardAction -= ShowCards;
         gameController.TurnStartAction -= TurnStart;
         gameController.CardStartAction -= CardStart;
-        gameController.ReStartAction -= Reset;
+        gameController.ResetAction -= Reset;
     }
 }

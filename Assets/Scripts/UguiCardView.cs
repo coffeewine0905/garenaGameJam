@@ -11,7 +11,12 @@ public class UguiCardView : CardView
     public Sprite oriSprite;
     public override void Init(CardData cardData, bool sortX)
     {
-        Image.sprite = cardData.Image;
+        if (cardData == null)
+        {
+            Reset();
+        }
+        else
+            Image.sprite = cardData.Image;
         rectTransform = Image.GetComponent<RectTransform>();
     }
 

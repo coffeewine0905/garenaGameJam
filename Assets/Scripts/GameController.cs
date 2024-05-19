@@ -26,7 +26,7 @@ public class GameController : MonoBehaviour
     public Action<int> CardStartAction;
     public Action<int> AddHpAction;
     public Action<int> HappyAction;
-    public Action ReStartAction;
+    public Action ResetAction;
     public GameState CurrentGameState { get; set; }
     public int currentSpice = 0;
     public int addSpiceMaxLimit = 3;
@@ -128,10 +128,14 @@ public class GameController : MonoBehaviour
                     {
                         player.Hand.AddRange(DrawCards(currentSpice));
                     }
-                    player.RefreshCardAction?.Invoke();
                 }
+
             }
             currentSpice = 0;
+        }
+        foreach (var player in Players)
+        {
+            player.RefreshCardAction?.Invoke();
         }
         yield return new WaitForSeconds(1.6f);
         GameManager.Instance.uiManager.SetDrawCardImage(false);
@@ -283,15 +287,14 @@ public class GameController : MonoBehaviour
         OnGameEnd?.Invoke(Players[currentPlayerIndex]);
     }
 
-    public void RestartGame()
+    public void ResetGame()
     {
         // 重置遊戲數據
         currentPlayerIndex = 0;
         totalSpice = 0;
         currentSpice = 0;
         Players.Clear();
-        ReStartAction?.Invoke();
-        StartGame();
+        ResetAction?.Invoke();
     }
 
     public void IncreaseSpice()

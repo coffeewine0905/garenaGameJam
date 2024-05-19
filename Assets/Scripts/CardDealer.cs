@@ -73,10 +73,12 @@ public class CardDealer : MonoBehaviour
         if (index < 0)
         {
             currentCardIndex = 0;
+            return;
         }
         else if (index >= cardControllers.Count)
         {
             currentCardIndex = cardControllers.Count - 1;
+            return;
         }
         Debug.Log("currentCardIndex: " + currentCardIndex);
 
@@ -92,6 +94,10 @@ public class CardDealer : MonoBehaviour
 
     public void UseCard()
     {
+        if (currentCardIndex >= cardDatas.Count)
+        {
+            return;
+        }
         cardControllers[currentCardIndex].Use();
         cardDatas.RemoveAt(currentCardIndex);
     }
@@ -106,6 +112,12 @@ public class CardDealer : MonoBehaviour
 
     public void RefreshCard(List<CardData> cardDatas, Action<int> OnUseAction)
     {
+        for (int i = 0; i < cardControllers.Count; i++)
+        {
+            cardControllers[i].Init(null, true);
+            cardControllers[i].OnUseAction = null;
+        }
+        Debug.Log("RefreshCard cardDatas count : " + cardDatas.Count);
         this.cardDatas = cardDatas;
         for (int i = 0; i < this.cardDatas.Count; i++)
         {
