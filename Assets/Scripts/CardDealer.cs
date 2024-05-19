@@ -81,6 +81,7 @@ public class CardDealer : MonoBehaviour
             return;
         }
         Debug.Log("currentCardIndex: " + currentCardIndex);
+        GameManager.Instance.audioManager.PlaySound("ui_menu_button_beep_13");
 
         if (lastCardIndex != -1 && lastCardIndex != currentCardIndex && lastCardIndex < cardControllers.Count)
         {

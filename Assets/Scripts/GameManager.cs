@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
     public GameController gameController;
     public UIManager uiManager;
     public CardUIManager cardUIManager;
+    public AudioManager audioManager;
     // Start is called before the first frame update
     void Start()
     {

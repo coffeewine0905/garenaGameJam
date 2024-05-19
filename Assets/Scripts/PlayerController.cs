@@ -28,10 +28,14 @@ public class PlayerController : MonoBehaviour
     private bool myTurn = false;
     private int maxHealth = 0;
     private bool hasGetPizza = false;
+    private float ShowNervousDelay = 0;
     private float ShowPizzaDelay = 0;
     private float ShowHappyDelay = 0;
     private float ShowPepperyDelay = 0;
     private CardDealer cardDealer;
+    private bool hasUseCard = false;
+    private bool hasUseSpice = false;
+
 
     public void Init(GameController gameController)
     {
@@ -51,6 +55,8 @@ public class PlayerController : MonoBehaviour
             if (id == player.ID)
             {
                 myTurn = false;
+                hasUseSpice = false;
+                hasUseCard = false;
             }
         };
         gameController.CardStartAction += CardStart;
@@ -62,7 +68,7 @@ public class PlayerController : MonoBehaviour
         int eatPizzaIndex = playerInputData.Animations.FindIndex(x => x.name == "eat pizza");
         int happyIndex = playerInputData.Animations.FindIndex(x => x.name == "happy");
         int pepperyIndex = playerInputData.Animations.FindIndex(x => x.name == "peppery");
-        ShowPizzaDelay += playerInputData.Animations[nervousIndex].Animation.Duration;
+        ShowNervousDelay += playerInputData.Animations[nervousIndex].Animation.Duration;
         ShowPizzaDelay += playerInputData.Animations[eatPizzaIndex].Animation.Duration;
         ShowHappyDelay += playerInputData.Animations[happyIndex].Animation.Duration;
         ShowPepperyDelay += playerInputData.Animations[pepperyIndex].Animation.Duration;
@@ -171,6 +177,8 @@ public class PlayerController : MonoBehaviour
         spineAnimationCtrl.GetSpineAnime.state.SetAnimation(0, "nervous", false);
         spineAnimationCtrl.AddSpineAnima("eat pizza", false);
         spineAnimationCtrl.AddSpineAnima("standby", true);
+        yield return new WaitForSeconds(ShowNervousDelay);
+        GameManager.Instance.audioManager.PlaySound("comedy_bite_creature_eating_01", 0.8f);
         yield return new WaitForSeconds(ShowPizzaDelay);
         float delay = 0;
         if (pizzaData.IsSpicy && player.CanRedrawPizza)
@@ -188,6 +196,7 @@ public class PlayerController : MonoBehaviour
         if (pizzaData.IsSpicy)
         {
             Debug.Log("Pizza is spicy");
+            GameManager.Instance.audioManager.PlaySound("Fantasy_Game_Magic_Dark Magic_3_Blast_Shadow_Warlock_Spell");
             spineAnimationCtrl.GetSpineAnime.state.SetAnimation(0, "peppery", false);
             spineAnimationCtrl.AddSpineAnima("standby", true);
             GameManager.Instance.uiManager.ShowLog("Pizza is spicy~~~");
@@ -231,6 +240,10 @@ public class PlayerController : MonoBehaviour
 
     private void SpiceAction()
     {
+        if (hasUseSpice)
+        {
+            return;
+        }
         if (Input.GetKeyDown(playerInputData.MoveUp))
         {
             IncreaseSpice();
@@ -246,6 +259,10 @@ public class PlayerController : MonoBehaviour
     }
     private void CardAction()
     {
+        if (hasUseCard)
+        {
+            return;
+        }
         if (Input.GetKeyDown(playerInputData.MoveRight))
         {
             cardDealer.ChooseRightCard();
@@ -273,8 +290,14 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("UseCard index out of range");
             return;
         }
+        if (hasUseCard)
+        {
+            return;
+        }
+        hasUseCard = true;
         //使用卡片
         int currentCardIndex = cardDealer.GetCurrentCardIndex();
+        GameManager.Instance.audioManager.PlaySound("ui_menu_button_click_02");
         cardDealer.UseCard();
         // cardControllers[currentCardIndex].Use();
         // //刪除使用過的卡片
@@ -291,6 +314,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         gameController.StartGetPizzaPhase();
+        hasUseCard = false;
     }
     public void ShowCards()
     {
@@ -354,6 +378,11 @@ public class PlayerController : MonoBehaviour
 
     public void ConfirmSpice()
     {
+        if (hasUseSpice)
+        {
+            return;
+        }
+        hasUseSpice = true;
         Debug.Log("Player id: " + player.ID + " ConfirmSpice: " + gameController.currentSpice);
         gameController.ConfirmSpice();
     }
@@ -362,6 +391,8 @@ public class PlayerController : MonoBehaviour
     {
         myTurn = false;
         hasGetPizza = false;
+        hasUseCard = false;
+        hasUseSpice = false;
         cardDealer.Reset();
         player.Health = maxHealth;
         ClearCards();
